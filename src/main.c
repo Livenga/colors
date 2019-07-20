@@ -11,6 +11,9 @@
 #define UNDERLINE (4)
 #define BLINK     (5)
 
+#define ADD_EF(target, value, n) \
+  if(strchr(target, ('0' + value)) == NULL) \
+      strncat(target, #value";", n)
 
 int
 main(int argc, char *argv[]) {
@@ -33,24 +36,13 @@ main(int argc, char *argv[]) {
   while((opt = getopt_long(argc, argv, "Biub",
           longopts, &longindex)) > 0) {
     switch(opt) {
-      case 'B':
-        if(strchr(effect, '1') == NULL)
-          strncat(effect, "1;", 31);
-        break;
-      case 'i':
-        if(strchr(effect, '3') == NULL)
-        strncat(effect, "3;", 31);
-        break;
-      case 'u':
-        if(strchr(effect, '4') == NULL)
-          strncat(effect, "4;", 31);
-        break;
-      case 'b':
-        if(strchr(effect, '5') == NULL)
-          strncat(effect, "5;", 31);
-        break;
+      case 'B': ADD_EF(effect, 1, 31); break;
+      case 'i': ADD_EF(effect, 3, 31); break;
+      case 'u': ADD_EF(effect, 4, 31); break;
+      case 'b': ADD_EF(effect, 5, 31); break;
     }
   }
+
   if(strlen(effect) != 0)
     printf("* Enabled effects: %s\n\n", effect);
 
